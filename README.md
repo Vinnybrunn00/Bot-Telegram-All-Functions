@@ -18,5 +18,5 @@
 
 ```GENERATE QRCODE:```
 
-
+![codeqr](https://user-images.githubusercontent.com/91799009/178830461-985a304a-d1f7-4327-9373-b6aa14b21df8.png)
 
