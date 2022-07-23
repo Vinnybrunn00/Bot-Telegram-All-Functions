@@ -1,9 +1,11 @@
-from debug import Help, Connected, Scan, QRCODE, Creator, Calculator
+from debug import Help, Connected, Welcome_, Delallmessage, Scan, QRCODE, Creator, Calculator
+from telebot.async_telebot import AsyncTeleBot
 from rich.console import Console
+from telebot import types, util
 from mytoken import TeleToken
-from rich import print
 import pytesseract
 import telebot
+import asyncio
 import qrcode
 import time
 import cv2
@@ -15,42 +17,39 @@ os.system(clear)
 with Console().status('Starting...'):
     time.sleep(1.5)
 
-bot = telebot.TeleBot(TeleToken())
+bot = AsyncTeleBot(TeleToken())
 @bot.message_handler(commands=['start', 'help'])
 def Start(message):
-    Help(message)
+    Help(message) # debug in ./debug.py
 
-Connected()
-@bot.message_handler(content_types=['photo'])
-def Scanner(message):
-    # Extract text from image
-    if not message.caption != '!scan':
-        Scan(message)
-        foto = bot.get_file(message.photo[1].file_id)
-        download = bot.download_file(foto.file_path)
+Connected() # debug in ./debug.py
+lista = ['xigamentos']
 
-        with open('image.jpg', 'wb') as photo:
-            photo.write(download)
-        
-        try:
-            img = cv2.imread('image.jpg')
-            string = pytesseract.image_to_string(img)
-            if not string == '':
-                bot.reply_to(message, string)
-            else:
-                bot.reply_to(message, 'Scanner error')
+#Welcome
+@bot.message_handler(content_types=['new_chat_members'])
+async def Welcome(message):
+    Welcome_() # debug in ./debug.py
+    try:
+        new_member = message.json['new_chat_member']['username']
+        info_group = message.json['chat']['title']
+        await bot.send_message(
+            message.chat.id, f'Boas vindas do Hubber, @{new_member}🤖, você foi adicionado ao grupo: *{info_group}*', parse_mode='Markdown')
+    except:
+        print('Não consegui dá boas vindas :(')
 
-        except telebot.apihelper.ApiTelegramException:
-            print(
-                '[red] > Excepiton error < [/]\n'
-                )
-            bot.reply_to(message, 'Nothing to scan here!')
+# delete message
+@bot.message_handler(content_types=[f'{util.content_type_service}', 'text'])
+async def Delete_message(message: types.Message):
+    Delallmessage(message) # debug in ./debug.py
+    try:
+        for palavrao in lista:
+            if palavrao in message.text.lower():
+                mensagem_id = message.message_id
+                await bot.delete_message(message.chat.id, mensagem_id)
+    except:
+        await bot.send_message(message.chat.id, 'Me torne admin para eu apagar mensagens não desejadas')
 
-        photo.close()
-
-@bot.message_handler(content_types=['text'])
-def All_func_text(message):
-    # QRcode
+    #qrcode gerator
     try:
         if '!qrcode' in message.text:
             text_user = message.text
@@ -71,22 +70,22 @@ def All_func_text(message):
             )
             img.save('QRCODE.png')
             imagem = open('QRCODE.png', 'rb')
-            bot.send_photo(message.chat.id, imagem)
+            await bot.send_photo(message.chat.id, imagem)
     except:
-        bot.send_message(message.chat.id, 'Use um link válido')
+        await bot.send_message(message.chat.id, 'Use um link válido')
         print(
             '[red] > Excepiton error < [/]\n'
             )
 
-    # creator       
+    #creator        
     if '!creator' in message.text:
         try:
-            Creator(message)
-            bot.send_message(message.chat.id, 'Aqui estar o contado do meu criador')
-            bot.send_contact(message.chat.id, '5574988562578', message.chat.first_name)
+            Creator(message) # debug in ./debug.py
+            await bot.send_message(message.chat.id, 'Aqui estar o contado do meu criador')
+            await bot.send_contact(message.chat.id, '5574988562578', message.chat.first_name)
         except:
             print(
-                '[red] > Excepiton error < [/]\n'
+            '[red] > Excepiton error < [/]\n'
                 )
 
     # Calculator
@@ -101,27 +100,54 @@ def All_func_text(message):
                 if '+' in mensagem:
                     posicao = mensagem.find('+')
                     soma = (int(value[:posicao]) + int(value[posicao+1:]))
-                    bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao])}+{int(value[posicao+1:])} = {soma}')
+                    await bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao])}+{int(value[posicao+1:])} = {soma}')
 
                 elif '-' in mensagem:
                     posicao1 = mensagem.find('-')
                     sub = (int(value[:posicao1]) - int(value[posicao1+1:]))
-                    bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao1])}-{int(value[posicao1+1:])} = {sub}')
+                    await bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao1])}-{int(value[posicao1+1:])} = {sub}')
 
                 elif '÷' in mensagem:
                     posicao2 = mensagem.find('÷')
                     div = (int(value[:posicao2]) / int(value[posicao2+1:]))
-                    bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao2])}÷{int(value[posicao2+1:])} = {div}')
+                    await bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao2])}÷{int(value[posicao2+1:])} = {div}')
 
                 elif '*' in mensagem:
                     posicao3 = mensagem.find('*')
                     multi = (int(value[:posicao3]) * int(value[posicao3+1:]))
-                    bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao3])}x{int(value[posicao3+1:])} = {multi}')
+                    await bot.reply_to(message, f'Resolvi sua equação 🤖\n\n{int(value[:posicao3])}x{int(value[posicao3+1:])} = {multi}')
 
         except:
             print(
                 '[red]> Exception error <[/]'
                 )
-            bot.send_message(message.chat.id, 'error')
+            await bot.send_message(message.chat.id, 'error')
 
-bot.infinity_polling()
+# Extract text from image
+@bot.message_handler(content_types=['photo'])
+async def Scanner(message):
+    if not message.caption != '!scan':
+        Scan(message) # debug in ./debug.py
+        foto = bot.get_file(message.photo[1].file_id)
+        download = bot.download_file(foto.file_path)
+
+        with open('image.jpg', 'wb') as photo:
+            photo.write(download)
+        
+        try:
+            img = cv2.imread('image.jpg')
+            string = pytesseract.image_to_string(img)
+            if not string == '':
+                await bot.reply_to(message, string)
+            else:
+                await bot.reply_to(message, 'Scanner error')
+
+        except telebot.apihelper.ApiTelegramException:
+            print(
+                '[red] > Excepiton error < [/]\n'
+                )
+            await bot.reply_to(message, 'Nothing to scan here!')
+
+        photo.close()
+    
+asyncio.run(bot.polling(non_stop=True))
