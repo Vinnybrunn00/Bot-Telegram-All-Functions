@@ -3,6 +3,7 @@ from telebot.async_telebot import AsyncTeleBot
 from rich.console import Console
 from telebot import types, util
 from mytoken import TeleToken
+from gtts import gTTS
 import pytesseract
 import telebot
 import asyncio
@@ -77,6 +78,22 @@ async def Delete_message(message: types.Message):
             '[red] > Excepiton error < [/]\n'
             )
 
+    # voice with text
+    if '!voz' in message.text:
+        command = message.text
+        save_voice = 'voice.mp3'
+        try:
+            voice = gTTS(
+                text=f'{command[5:]}',
+                lang='pt-br'
+            )
+            voice.save(save_voice)
+            await bot.send_voice(message.chat.id, open(f'{save_voice}', 'rb'))
+        except:
+            print(
+            '[red] > Excepiton error < [/]\n'
+                )
+
     #creator        
     if '!creator' in message.text:
         try:
@@ -87,7 +104,7 @@ async def Delete_message(message: types.Message):
             print(
             '[red] > Excepiton error < [/]\n'
                 )
-
+    
     # Calculator
     operadores = '+-÷x'
     for operador in operadores:
