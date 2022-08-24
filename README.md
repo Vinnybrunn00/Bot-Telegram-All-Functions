@@ -12,5 +12,6 @@
 |       ✅        |   Simple arithmetic calculator   |
 |       ✅        |   Owner bot                      |
 |       ✅        |   Generate qrcode	              |
-|       ✅        |   delete inappropriate messages  |
-|       ✅        |   turn text into voice	          |
+|       ✅        |   Delete inappropriate messages  |
+|       ✅        |   Turn text into voice	          |
+|       ✅        |   Translate mode	          |
