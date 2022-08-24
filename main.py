@@ -1,6 +1,7 @@
 from debug import Help, Connected, Welcome_, Delallmessage, Scan, QRCODE, Creator, Calculator
 from telebot.async_telebot import AsyncTeleBot
 from rich.console import Console
+from translate import Translator
 from telebot import types, util
 from mytoken import TeleToken
 from gtts import gTTS
@@ -89,6 +90,39 @@ async def Delete_message(message: types.Message):
             )
             voice.save(save_voice)
             await bot.send_voice(message.chat.id, open(f'{save_voice}', 'rb'))
+        except:
+            print(
+            '[red] > Excepiton error < [/]\n'
+                )
+    # Translate bot           
+    if '!translate' in message.text:
+        trans = message.text
+        try:
+            if trans[11:13] != '':
+                if trans[11:13] == 'eng':
+                    translate_eng = Translator(from_lang='pt-br', to_lang='english')
+                    ingles = translate_eng(f'{trans[15:]}')
+                    await bot.send_message(message.chat.id, ingles)
+
+                elif trans[11:13] == 'esp':
+                    translate_esp = Translator(from_lang='pt-br', to_lang='es-ES')
+                    espanhol = translate_esp(f'{trans[15:]}')
+                    await bot.send_message(message.chat.id, espanhol)
+                
+                elif trans[11:13] == 'fra':
+                    translate_fra = Translator(from_lang='pt-br', to_lang='fr-FR')
+                    frances = translate_fra(f'{trans[15:]}')
+                    await bot.send_message(message.chat.id, frances)
+                
+                elif trans[11:13] == 'ger':
+                    translate_ger = Translator(from_lang='pt-br', to_lang='de_DE')
+                    alemao = translate_ger(f'{trans[15:]}')
+                    await bot.send_message(message.chat.id, alemao)
+
+            else:
+                await bot.send_message(message.chat.id, 
+                'Inclua o código do idioma\n\nExemplo: !translate eng sua frase')
+
         except:
             print(
             '[red] > Excepiton error < [/]\n'
