@@ -21,6 +21,8 @@
 
 ![terminal2](https://user-images.githubusercontent.com/91799009/178828330-5c0397bf-722f-4f02-a2e2-938b577d39d1.gif)
 
+Set your API TOKEN from telegram in **./debug**
+
 
 #### Bot Functionality
 
@@ -35,3 +37,7 @@
 |       ✅        |   Delete inappropriate messages  |
 |       ✅        |   Turn text into voice	          |
 |       ✅        |   Translate mode	          |
+
+#### OBS
+
+This version is in Brazilian Portuguese.🇧🇷
