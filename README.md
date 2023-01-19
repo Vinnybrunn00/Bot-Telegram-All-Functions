@@ -1,3 +1,9 @@
+### installing dependencies
+```
+pip install -r requirements.txt
+```
+
+
 ### Starting Bot
 ![terminal2](https://user-images.githubusercontent.com/91799009/178828330-5c0397bf-722f-4f02-a2e2-938b577d39d1.gif)
 
