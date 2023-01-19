@@ -1,0 +1,7 @@
+pyTelegramBotAPI
+rich
+translate
+gTTS
+pytesseract
+qrcode
+opencv-python
