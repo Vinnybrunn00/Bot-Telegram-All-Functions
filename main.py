@@ -1,17 +1,27 @@
-from debug import Help, Connected, Welcome_, Delallmessage, Scan, QRCODE, Creator, Calculator
 from telebot.async_telebot import AsyncTeleBot
 from rich.console import Console
 from translate import Translator
 from telebot import types, util
-from mytoken import TeleToken
+from keys.mytoken import teleToken
 from gtts import gTTS
+from lib.futebol import Ranking
+from asyncio import run
+from lib.network import CheckNetwork
 import pytesseract
 import telebot
-import asyncio
 import qrcode
 import time
 import cv2
 import os
+from debug.debug import (
+    Help,
+    Connected,
+    Welcome_,
+    Delallmessage,
+    Scan, QRCODE,
+    Creator,
+    Calculator
+)
 
 clear = 'clear' if os.name == 'posix' else 'cls'
 os.system(clear)
@@ -19,14 +29,25 @@ os.system(clear)
 with Console().status('Starting...'):
     time.sleep(1.5)
 
-bot = AsyncTeleBot(TeleToken())
+CheckNetwork(timeout=5)    
+
+bot = AsyncTeleBot(teleToken())
+
 @bot.message_handler(commands=['start', 'help'])
 def Start(message):
     Help(message) # debug in ./debug.py
 
 Connected() # debug in ./debug.py
+
 lista = ['xigamentos']
 
+# Championship brasilian
+@bot.message_handler(commands=['brasileirao'])
+async def Brasileirao(message):
+    try:
+        await bot.send_message(message.chat.id, Ranking(), parse_mode='Markdown')
+    except:
+        await bot.send_message(message.chat.id, 'Indisponível no momento!!!')
 #Welcome
 @bot.message_handler(content_types=['new_chat_members'])
 async def Welcome(message):
@@ -37,7 +58,7 @@ async def Welcome(message):
         await bot.send_message(
             message.chat.id, f'Boas vindas do Hubber, @{new_member}🤖, você foi adicionado ao grupo: *{info_group}*', parse_mode='Markdown')
     except:
-        print('Não consegui dá boas vindas :(')
+        print('Não consegui dar boas vindas :(')
 
 # delete message
 @bot.message_handler(content_types=[f'{util.content_type_service}', 'text'])
@@ -49,7 +70,7 @@ async def Delete_message(message: types.Message):
                 mensagem_id = message.message_id
                 await bot.delete_message(message.chat.id, mensagem_id)
     except:
-        await bot.send_message(message.chat.id, 'Me torne admin para eu apagar mensagens não desejadas')
+        await bot.send_message(message.chat.id, 'Torne-me admin para eu apagar mensagens não desejadas')
 
     #qrcode gerator
     try:
@@ -201,4 +222,4 @@ async def Scanner(message):
 
         photo.close()
     
-asyncio.run(bot.polling(non_stop=True))
+run(bot.polling(non_stop=True))

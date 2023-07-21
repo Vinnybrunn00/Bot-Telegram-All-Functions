@@ -1,4 +1,4 @@
-from mytoken import TeleToken
+from keys.mytoken import TeleToken
 from telebot import TeleBot
 from rich import print
 import pyfiglet as pg

@@ -27,16 +27,16 @@ Set your API TOKEN from telegram in **./debug**
 #### Bot Functionality
 
 
-|       Bot      |           Functionality         |
-| :-----------: | :--------------------------------: |
-|       ✅        |   Extract text from images             |
-|       ✅        |   Welcome to new members         |
-|       ✅        |   Simple arithmetic calculator   |
-|       ✅        |   Owner bot                      |
-|       ✅        |   Generate qrcode	              |
-|       ✅        |   Delete inappropriate messages  |
-|       ✅        |   Turn text into voice	          |
-|       ✅        |   Translate mode	          |
+|       Bot     |           Functionality           |
+| :-----------: | :--------------------------------:|
+|       ✅      |   Extract text from images        |
+|       ✅      |   Welcome to new members          |
+|       ✅      |   Simple arithmetic calculator    |
+|       ✅      |   Owner bot                       |
+|       ✅      |   Generate qrcode	               |
+|       ✅      |   Delete inappropriate messages   |
+|       ✅      |   Turn text into voice	           |
+|       ✅      |   Translate mode	               |
 
 #### OBS
 
