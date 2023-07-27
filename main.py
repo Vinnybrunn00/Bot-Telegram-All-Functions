@@ -7,6 +7,7 @@ from gtts import gTTS
 from lib.futebol import Ranking
 from asyncio import run
 from lib.network import CheckNetwork
+from lib.flood import Flood
 import pytesseract
 import telebot
 import qrcode
@@ -59,7 +60,14 @@ async def Welcome(message):
             message.chat.id, f'Boas vindas do Hubber, @{new_member}🤖, você foi adicionado ao grupo: *{info_group}*', parse_mode='Markdown')
     except:
         print('Não consegui dar boas vindas :(')
-
+#flood
+@bot.message_handler(commands=['flood'])
+async def sendFlood(message):
+    try:
+        await bot.send_message(message.chat.id, Flood())
+    except:
+        print('Flood solicitado')
+        
 # delete message
 @bot.message_handler(content_types=[f'{util.content_type_service}', 'text'])
 async def Delete_message(message: types.Message):
